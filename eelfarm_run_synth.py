@@ -5,15 +5,19 @@ import pathlib
 import pickle
 import nibabel as nib
 
+st.synthesize
+
 if __name__ == '__main__':
-    ip = "10.194.240.63"
-    indir = "/Users/marshlab/Desktop/test_MRIs_for_conversion/outputs/"
-    outdir = "/Users/marshlab/Desktop/test_recon_all_clinical/processed"
+    ip = "10.229.43.52"
+    indir = "/Volumes/Expansion/strokedata/alzheimers/mri/"
+    outdir = "/Volumes/Expansion/strokedata/alzheimers/processed"
+    is_synthetic = False # these are real T1s
+    
     server = eelfarm.start_server(address=ip)
     eelbrain.gui.run(block=False)
 
     farmed_subs = []
-    for fp in pathlib.Path(indir).glob("**/*.nii"):
+    for fp in pathlib.Path(indir).glob("**/*.nii*"):
         sub = fp.parent.name
         # an nii file for this subject was already sent
         if sub in farmed_subs:
@@ -22,11 +26,11 @@ if __name__ == '__main__':
 
         img = nib.load(fp)
 
-        print("start synthesize")
+        print(f"start synthesize {sub}")
         dst = f"{str(pathlib.Path(outdir) / f'{sub}.pickle')}"
 
         if pathlib.Path(dst).is_file():
             print(f"{dst} exists; continuing")
             continue
 
-        server.put(dst, st.synthesize, sub, img.get_fdata(), img.affine)
+        server.put(dst, st.synthesize, sub, img.get_fdata(), img.affine, synthetic=is_synthetic)
