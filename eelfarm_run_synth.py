@@ -5,8 +5,6 @@ import pathlib
 import pickle
 import nibabel as nib
 
-st.synthesize
-
 if __name__ == '__main__':
     ip = "10.229.43.52"
     indir = "/Volumes/Expansion/strokedata/alzheimers/mri/"

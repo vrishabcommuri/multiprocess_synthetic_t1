@@ -30,7 +30,6 @@ def synthesize(subject, img, affine, synthetic=True):
                 f.write(errmsg)
             return
 
-        subject = subject[:5]
         print("start", subject)
         # data is a serialized nii file
         # pathlib.Path(f"./{subject}").mkdir(parents=True, exist_ok=True)
