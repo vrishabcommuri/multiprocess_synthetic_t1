@@ -10,7 +10,15 @@ import mne
 import matplotlib.pyplot as plt
 from scipy.ndimage import label
 
-def synthesize(subject, img, affine):
+def synthesize(subject, img, affine, synthetic=True):
+    """
+    img: image data
+    affine: coord transform
+    synthetic: if True run recon_all_clinical pipeline
+               otherwise, run recon_all pipeline.
+               use False to process real mris using the
+               cluster
+    """
     serialized_mri_log = None
 
     if not pathlib.Path(f"{subject}.tar").exists():
@@ -29,7 +37,10 @@ def synthesize(subject, img, affine):
         nib.save(img, f"./{subject}.nii")
 
         # creates subject.log and subject/ a directory with processed subject data
-        os.system(f"./runall.csh {subject}")
+        if synthetic:
+            os.system(f"./runall.csh {subject}")
+        else:
+            os.system(f"./runall_realmri.csh {subject}")
 
         os.system(f"tar -cvf {subject}.tar {subject}")
 
