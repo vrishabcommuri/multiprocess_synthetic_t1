@@ -7,11 +7,11 @@ if ( $#argv == 0 ) then
     exit 1
 endif
 
-set indir = "/Users/marshlab/Desktop/recon_all_clinical/work/"
+set indir = "/export/vrishab/multiprocess_synthetic_t1/work/"
 
-set sdir = "/Users/marshlab/Desktop/recon_all_clinical/work/"
+set sdir = "/export/vrishab/multiprocess_synthetic_t1/work/"
 
-set recon = "/Applications/freesurfer/8.0.0/bin/recon-all"
+set recon = "/export/vrishab/freesurfer/bin/recon-all"
 
 set target_id = $1
 
@@ -24,20 +24,18 @@ foreach f ($indir/${target_id}*.nii*)
 
     set fname = `basename $f`
 
-    # Extract first 5 characters to use as subject ID
-    set subjid = `echo $fname | cut -c1-5`
-
     # Create a timestamped log file
-    set log = "${subjid}.log"
+    set log = "${target_id}.log"
 
-    echo "Processing $fname with subject ID $subjid"
+    echo "Processing $fname with subject ID ${target_id}"
     echo "Logging to $log"
 
     # Run recon-all and capture stdout + stderr
     tcsh $recon \
         -i $f \
-        -subjid $subjid \
+        -subjid $target_id \
         -sd $sdir \
+	-all \
         >& $log
 
 end

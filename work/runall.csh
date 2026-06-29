@@ -24,19 +24,16 @@ foreach f ($indir/${target_id}*.nii*)
 
     set fname = `basename $f`
 
-    # Extract first 5 characters to use as subject ID
-    set subjid = `echo $fname | cut -c1-5`
-
     # Create a timestamped log file
-    set log = "${subjid}.log"
+    set log = "${target_id}.log"
 
-    echo "Processing $fname with subject ID $subjid"
+    echo "Processing $fname with subject ID ${target_id}"
     echo "Logging to $log"
 
     # Run recon-all and capture stdout + stderr
     tcsh $recon \
         -i $f \
-        -subjid $subjid \
+        -subjid $target_id \
         -sdir $sdir \
         -threads 30 \
         >& $log
